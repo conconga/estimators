@@ -1,4 +1,5 @@
 #~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-
+#
 # \author    Luciano Augusto Kruk
 # \website   www.kruk.eng.br
 # \date      2017.0
@@ -9,7 +10,9 @@
 #
 # \license: Please feel free to use and modify this, but keep this header as
 #           part of yours. Thanks.
-
+#
+# \source:  www.github.com/conconga/estimators
+#
 #~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-~-=-
 ##WWww=--  import section: --=wwWW##
 import numpy               as np

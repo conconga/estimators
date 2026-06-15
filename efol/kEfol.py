@@ -1,4 +1,18 @@
 #>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>#
+#
+# \author    Luciano Augusto Kruk
+# \website   www.kruk.eng.br
+# \date      2026.0
+#
+# \description: This file contains an implementation of the 
+#               "Error Filtering Online Learning" (EFOL) algorithm.
+#
+# \license: Please feel free to use and modify this, but keep this header as
+#           part of yours. Thanks.
+#
+# \source:  www.github.com/conconga/estimators
+#
+#>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>#
 #                                                                                  #
 #>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>#
 

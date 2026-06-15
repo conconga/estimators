@@ -1,0 +1,3 @@
+[submodule "submodules/gcnutils"]
+	path = submodules/gcnutils
+	url = https://github.com/conconga/gcnutils.git

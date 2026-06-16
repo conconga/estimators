@@ -1,0 +1,17 @@
+abbr alpha \underline{\alpha}
+abbr beta  \underline{\beta}
+abbr delta \underline{\delta}
+
+abbr ttr \underline{\theta}^{\triangle}
+abbr th  \underline{\hat{\theta}}
+abbr tti \underline{\tilde{\theta}}
+
+abbr uf \underline{\hat{f}}
+
+abbr uu \underline{u}
+abbr ue \underline{e}
+abbr uz \underline{z}
+abbr uH \underline{H}_ {\theta}
+abbr uG \underline{\Gamma}
+
+abbr ws \mathbb{W}

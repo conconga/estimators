@@ -173,7 +173,7 @@ Here we present two ilustrative examples of EFOL in action.
 The signal to follow is $\alpha(t) =$ 16. if t < 1.0 else 9. The model we will use is
 $\beta(t) = (2.0 + \theta)^{2}$. The result is depicted in the next figure.
 
-![example 1]("assets/example_efol_1.svg")
+![example 1](assets/example_efol_1.svg)
 
 <img title="example 1" src="assets/example_efol_1.svg">
 

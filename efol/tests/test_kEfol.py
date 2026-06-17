@@ -13,21 +13,6 @@ from submodules.gcnutils.kltisystems import k1OrderLTIsysMimoDiscrete
 from efol import kEfol
 
 
-# Small helper to create simple objects if k1OrderLTIsysMimoDiscrete has an update method
-class DummyFilter:
-    def __init__(self, pole, Ts, zeros):
-        self.pole  = pole
-        self.Ts    = Ts
-        self.zeros = zeros
-
-        # store last input for inspection
-        self.last_input = None
-
-    def update(self, x):
-                # simple pass-through filter (no dynamics) for test predictability
-        self.last_input = np.array(x).astype(float)
-        return self.last_input
-
 class TestClass_kEfol:
 
     def test_constructor_requires_theta0_Ts_Gamma_and_dim_alpha(self):

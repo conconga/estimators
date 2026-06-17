@@ -15,6 +15,9 @@
     Law](#control-law)
 - [<span class="toc-section-number">4</span> Examples](#examples)
   - [<span class="toc-section-number">4.1</span> Example 1](#example-1)
+  - [<span class="toc-section-number">4.2</span> Example 2](#example-2)
+- [<span class="toc-section-number">5</span> How to use
+  it](#how-to-use-it)
 
 # Introduction
 
@@ -170,19 +173,56 @@ Here we present two ilustrative examples of EFOL in action.
 
 ## Example 1
 
-The signal to follow is $\alpha(t) =$ 16. if t < 1.0 else 9. The model we will use is
-$\beta(t) = (2.0 + \theta)^{2}$. The result is depicted in the next figure.
+The signal to follow is
+
+$\alpha(t) =$ 16. if t < 1.0 else 9.0, plus noise.
+
+The model we will use is
+
+$\beta(t) = (2.0 + \theta)^{2}$
+
+The result is depicted in the next figure.
 
 ![example 1](assets/example_efol_1.svg)
 
-<img title="example 1" src="assets/example_efol_1.svg">
+## Example 2
 
-<img title="example 2" src="assets/example_efol_2.svg">
+The signal to follow is
+
+$\alpha(t) = 3.3  \sin(2 \pi 3 t)$ plus noise.
+
+The Model here will be:
+
+$\beta(t) = \theta_{0}  \cos(2 \pi 3 t + \theta_{1})$
+
+The next graph depicts the results.
+
+![example 2](assets/example_efol_2.svg)
 
 
 
+# How to use it
 
-- example
+As a reference for any application of the class, the examples presented above
+are include as part of the test package.
 
-- how to use it
+The initialization is done with:
 
+| **argument** | **type** | **description** |
+| -----------: | :------: | :-------------- |
+| `filterpole` | float or list | The value(s) for $\lambda$. If scalar, the filters for each element in the error vector will be equal. |
+| `dim_alpha`  | int      | Dimension of $\underline{\alpha}(t)$. |
+| `theta0`     | float or iteratable | Value of $\underline{\theta}(t=0)$. |
+| `Ts`         | float    | Time step [s] |
+| `Gamma_theta` | float or iteratable | Matrix $\underline{\Gamma}_{\theta}$. |
+| `Gamma_error` | float or iteratable | Matrix $\underline{\Gamma}_{e}$. This is optional. |
+
+The update steps receives $\underline{\alpha}(t)$, $\underline{\beta}(t)$ and the Hessian matrix, which
+shall be calculated beforehand, like this:
+
+```python
+theta = kEfol().update(alpha, beta, hessian)
+```
+
+As $\underline{\beta}(t)$ depends on the estimations $\underline{\theta}$
+at the instant $[k-1]$, the `update()` method returns $\underline{\theta}[k]$.

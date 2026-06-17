@@ -1,18 +1,20 @@
 - [<span class="toc-section-number">1</span>
   Introduction](#introduction)
   - [<span class="toc-section-number">1.1</span> Notation](#notation)
-  - [<span class="toc-section-number">1.2</span> In a
-    Nutshell](#in-a-nutshell)
-  - [<span class="toc-section-number">1.3</span> EFOL](#efol)
-    - [<span class="toc-section-number">1.3.1</span> Goal](#goal)
-    - [<span class="toc-section-number">1.3.2</span> Error
-      Function](#error-function)
-    - [<span class="toc-section-number">1.3.3</span> Filtering with
-      LTI](#filtering-with-lti)
-    - [<span class="toc-section-number">1.3.4</span> Expansion of
-      \$(t)\$](#expansion-of-t)
-    - [<span class="toc-section-number">1.3.5</span> Control
-      Law](#control-law)
+- [<span class="toc-section-number">2</span> In a
+  Nutshell](#in-a-nutshell)
+- [<span class="toc-section-number">3</span> EFOL](#efol)
+  - [<span class="toc-section-number">3.1</span> Goal](#goal)
+  - [<span class="toc-section-number">3.2</span> Error
+    Function](#error-function)
+  - [<span class="toc-section-number">3.3</span> Filtering with
+    LTI](#filtering-with-lti)
+  - [<span class="toc-section-number">3.4</span> Expansion of
+    u(t)](#expansion-of-ut)
+  - [<span class="toc-section-number">3.5</span> Control
+    Law](#control-law)
+- [<span class="toc-section-number">4</span> Examples](#examples)
+  - [<span class="toc-section-number">4.1</span> Example 1](#example-1)
 
 # Introduction
 
@@ -40,7 +42,7 @@ Polycarpou.
 - The vector $\underline{z}(t)$ collects all states and internal variables of
     the system model at instant $t$.
 
-## In a Nutshell
+# In a Nutshell
 
 In case you are not familiar with the concept of EFOL, consider a model
 represented by a equality, where the LHS of the equality collects what you can
@@ -52,9 +54,9 @@ hidden in $\beta(t)$. The trick now is to approximate $\beta(t)$, and adapt its
 internal parameters online to have always the best match between $\alpha(t)$
 and $\beta(t)$.
 
-## EFOL
+# EFOL
 
-### Goal
+## Goal
 
 Let a function $\underline{\hat{f}}$ be the approximation function. It can be
 either a linear, or a nonlinear (eg. as a multilayered neural network)
@@ -81,7 +83,7 @@ $$ \underline{u}(t) = \underline{\beta}(t) - \underline{\alpha}(t) $$
 
 continously decreases.
 
-### Error Function
+## Error Function
 
 Based on the definition of $\underline{\alpha}(t)$, we shall rewrite $\underline{u}(t)$ as:
 
@@ -101,7 +103,7 @@ $$
     \underline{\hat{f}}(\underline{z}(t);\underline{\theta}^{\triangle})
 $$
 
-### Filtering with LTI
+## Filtering with LTI
 
 We need a solution that provides both:
 
@@ -124,7 +126,7 @@ with $\lambda \in \mathbb{R}^{+}$. The differential equation of the output of th
 
 $$ \underline{\dot{e}}(t) = -\lambda \underline{e}(t) + \lambda \underline{u}(t) $$
 
-### Expansion of $\underline{u}(t)$
+## Expansion of u(t)
 
 Here we present an alternative to have $\underline{u}(t)$ as a function of $\underline{\tilde{\theta}}$:
 
@@ -145,7 +147,7 @@ $$
 \end{aligned}
 $$
 
-### Control Law
+## Control Law
 
 The next step is to find a control law for $\underline{\hat{\theta}}$. This is
 achieved using Lyapunov to force the absolute value of the filtered error
@@ -162,11 +164,25 @@ $$ \underline{\dot{\hat{\theta}}} = - \underline{\Gamma}_ \theta \underline{H}_ 
 
 This equation is implemented in discrete form in the package `kEfol`.
 
+# Examples
+
+Here we present two ilustrative examples of EFOL in action.
+
+## Example 1
+
+The signal to follow is $\alpha(t) =$ 16. if t < 1.0 else 9. The model we will use is
+$\beta(t) = (2.0 + \theta)^{2}$. The result is depicted in the next figure.
+
+![example 1]("assets/example_efol_1.svg")
+
+<img title="example 1" src="assets/example_efol_1.svg">
+
+<img title="example 2" src="assets/example_efol_2.svg">
+
+
 
 
 - example
-
-- theory
 
 - how to use it
 

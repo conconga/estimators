@@ -77,13 +77,19 @@ class kEfol:
         if val is None:
             raise ValueError(f'{val_name} shall be defined')
 
+    def _return_a_scalar_if_is_scalar(self, val):
+        if isinstance(val, (int, float)):
+            return val
+        else:
+            return val if val.size > 1 else val.reshape(-1)[0]
+
 
     def update(self, alpha, beta, hessian):
 
-        if isinstance(alpha, (list, tuple)):
+        if isinstance(alpha, (int, float, list, tuple)):
             alpha = kArrayNav(alpha, hvector=False)
 
-        if isinstance(beta, (list, tuple)):
+        if isinstance(beta, (int, float, list, tuple)):
             beta = kArrayNav(beta, hvector=False)
 
         if isinstance(hessian, (list, tuple, np.ndarray)):
@@ -98,16 +104,20 @@ class kEfol:
         assert not any(np.isnan(self.e))
 
         # derivative:
-        ddt = - self.Gamma_theta * hessian.T * self.Gamma_error * self.e
+        if hasattr(hessian, "T"):
+            ddt = - self.Gamma_theta * hessian.T * self.Gamma_error * self.e
+        else:
+            # scalar:
+            ddt = - self.Gamma_theta * hessian * self.Gamma_error * self.e
 
         # integration step:
         self.theta += self.Ts * ddt
         assert not any(np.isnan(self.theta))
 
-        return self.theta
+        return self._return_a_scalar_if_is_scalar(self.theta)
 
     def get_filtered_error(self):
-        return self.e
+        return self._return_a_scalar_if_is_scalar(self.e)
 
 
 #>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>#

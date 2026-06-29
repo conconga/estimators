@@ -35,7 +35,7 @@ class kEfol:
 
     def __init__(self,
                  filterpole  = -1,
-                 dim_alpha   = None,
+                 dim_error   = None,
                  theta0      = None,
                  Ts          = None,
                  fn_deadzone = None,
@@ -55,10 +55,10 @@ class kEfol:
 
         self.fn_deadzone = fn_deadzone
 
-        self._ensure_not_a_None(dim_alpha, "dim_alpha")
+        self._ensure_not_a_None(dim_error, "dim_error")
 
         if isinstance(filterpole, (int, float, np.float64)):
-            filterpole = [float(filterpole)] * dim_alpha
+            filterpole = [float(filterpole)] * dim_error
 
         if isinstance(filterpole, (list, tuple)):
             for p in filterpole:
@@ -68,12 +68,13 @@ class kEfol:
             raise ValueError(f'not prepared for type = "{str(type(filterpole))}"')
 
         if Gamma_error is None:
-            self.Gamma_error = kArrayNav(np.eye(dim_alpha))
+            self.Gamma_error = kArrayNav(np.eye(dim_error))
         else:
             self.Gamma_error = Gamma_error
 
         # filter L/(s+L) for alpha and beta:
-        self.filter = k1OrderLTIsysMimoDiscrete(filterpole, Ts, [0 for i in range(dim_alpha)])
+        self.filter = k1OrderLTIsysMimoDiscrete(filterpole, Ts, [0 for i in range(dim_error)])
+
 
 
     def _ensure_not_a_None(self, val, val_name):

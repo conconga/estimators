@@ -39,7 +39,7 @@ class TestClass_Example_1_kEfol:
 
         efol = kEfol(
                 filterpole  = -15,
-                dim_alpha   = 1,
+                dim_error   = 1,
                 theta0      = theta,
                 Ts          = Ts,
                 Gamma_theta = 0.5,

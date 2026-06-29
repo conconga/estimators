@@ -212,7 +212,7 @@ The initialization is done with:
 | **argument** | **type** | **description** |
 | -----------: | :------: | :-------------- |
 | `filterpole` | float or list | The value(s) for $\lambda$. If scalar, the filters for each element in the error vector will be equal. |
-| `dim_alpha`  | int      | Dimension of $\underline{\alpha}(t)$. |
+| `dim_error`  | int      | Dimension of either $\underline{\alpha}(t)$, or $\underline{\beta}(t)$ or $\underline{e}(t)$. |
 | `theta0`     | float or iteratable | Value of $\underline{\theta}(t=0)$. |
 | `Ts`         | float    | Time step [s] |
 | `Gamma_theta` | float or iteratable | Matrix $\underline{\Gamma}_{\theta}$. |

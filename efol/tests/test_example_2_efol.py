@@ -38,7 +38,7 @@ class TestClass_Example_2_kEfol:
 
         efol = kEfol(
                 filterpole  = -40,
-                dim_alpha   = 1,
+                dim_error   = 1,
                 theta0      = theta,
                 Ts          = Ts,
                 Gamma_theta = np.diag((30, 0.5))

@@ -17,40 +17,40 @@ from efol import kEfol
 class TestClass_kEfol:
     is_show_with_block = False
 
-    def test_constructor_requires_theta0_Ts_Gamma_and_dim_alpha(self):
+    def test_constructor_requires_theta0_Ts_Gamma_and_dim_error(self):
         # missing theta0
         with pytest.raises(ValueError):
-            kEfol(filterpole=-1, dim_alpha=1, theta0=None, Ts=0.1, Gamma_theta=1.0)
+            kEfol(filterpole=-1, dim_error=1, theta0=None, Ts=0.1, Gamma_theta=1.0)
 
         # missing Ts
         with pytest.raises(ValueError):
-            kEfol(filterpole=-1, dim_alpha=1, theta0=[0.0], Ts=None, Gamma_theta=1.0)
+            kEfol(filterpole=-1, dim_error=1, theta0=[0.0], Ts=None, Gamma_theta=1.0)
 
         # missing Gamma_theta
         with pytest.raises(ValueError):
-            kEfol(filterpole=-1, dim_alpha=1, theta0=[0.0], Ts=0.1, Gamma_theta=None)
+            kEfol(filterpole=-1, dim_error=1, theta0=[0.0], Ts=0.1, Gamma_theta=None)
 
-        # missing dim_alpha
+        # missing dim_error
         with pytest.raises(ValueError):
-            kEfol(filterpole=-1, dim_alpha=None, theta0=[0.0], Ts=0.1, Gamma_theta=1.0)
+            kEfol(filterpole=-1, dim_error=None, theta0=[0.0], Ts=0.1, Gamma_theta=1.0)
 
 
     def test_constructor_rejects_non_negative_filterpole(self):
 
         # positive pole or zero should raise
         with pytest.raises(ValueError):
-            kEfol(filterpole=0.0, dim_alpha=1, theta0=[0.0], Ts=0.1, Gamma_theta=1.0)
+            kEfol(filterpole=0.0, dim_error=1, theta0=[0.0], Ts=0.1, Gamma_theta=1.0)
 
         with pytest.raises(ValueError):
-            kEfol(filterpole=0.5, dim_alpha=2, theta0=[0.0, 0.0], Ts=0.1, Gamma_theta=1.0)
+            kEfol(filterpole=0.5, dim_error=2, theta0=[0.0, 0.0], Ts=0.1, Gamma_theta=1.0)
 
         # valid negative pole (single) works
-        kev = kEfol(filterpole=-2.0, dim_alpha=2, theta0=[0.0, 0.0], Ts=0.1, Gamma_theta=1.0)
+        kev = kEfol(filterpole=-2.0, dim_error=2, theta0=[0.0, 0.0], Ts=0.1, Gamma_theta=1.0)
         assert hasattr(kev, "filter")
 
 
     def test_update_with_scalar_list_and_ndarray_and_kArrayNav(self):
-        kev = kEfol(filterpole=-1.0, dim_alpha=2, theta0=[0.0, 0.0], Ts=0.1, Gamma_theta=np.eye(2))
+        kev = kEfol(filterpole=-1.0, dim_error=2, theta0=[0.0, 0.0], Ts=0.1, Gamma_theta=np.eye(2))
 
         # inputs as Python lists
         alpha = [0.1, 0.2]
@@ -79,7 +79,7 @@ class TestClass_kEfol:
 
 
     def test_update_raises_on_nan_inputs(self):
-        kev = kEfol(filterpole=-1.0, dim_alpha=2, theta0=[0.0, 0.0], Ts=0.1, Gamma_theta=np.eye(2))
+        kev = kEfol(filterpole=-1.0, dim_error=2, theta0=[0.0, 0.0], Ts=0.1, Gamma_theta=np.eye(2))
         alpha = [np.nan, 0.0]
         beta = [0.1, 0.2]
         hessian = np.eye(2)
@@ -112,7 +112,7 @@ class TestClass_kEfol:
 
         efol = kEfol(
                 filterpole  = -15,
-                dim_alpha   = 1,
+                dim_error   = 1,
                 theta0      = theta,
                 Ts          = Ts,
                 Gamma_theta = 0.5,

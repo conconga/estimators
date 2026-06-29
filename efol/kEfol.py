@@ -38,6 +38,7 @@ class kEfol:
                  dim_alpha   = None,
                  theta0      = None,
                  Ts          = None,
+                 fn_deadzone = None,
                  Gamma_theta = None,
                  Gamma_error = None,
      ):
@@ -51,6 +52,8 @@ class kEfol:
 
         self._ensure_not_a_None(Gamma_theta, "Gamma_theta")
         self.Gamma_theta = Gamma_theta
+
+        self.fn_deadzone = fn_deadzone
 
         self._ensure_not_a_None(dim_alpha, "dim_alpha")
 
@@ -103,21 +106,31 @@ class kEfol:
         self.e = kArrayNav(self.filter.update(beta - alpha), hvector=False)
         assert not any(np.isnan(self.e))
 
+        if self.fn_deadzone is not None:
+            # get the mask based on deadzone of errors:
+            mask = self.fn_deadzone(self.e)
+        else:
+            mask = np.ones(len(self.e))
+
         # derivative:
+        err_masked = kArrayNav( [i*j for i,j in zip(mask, self.e)], hvector=0)
         if hasattr(hessian, "T"):
-            ddt = - self.Gamma_theta * hessian.T * self.Gamma_error * self.e
+            self.ddt = - self.Gamma_theta * hessian.T * self.Gamma_error * err_masked
         else:
             # scalar:
-            ddt = - self.Gamma_theta * hessian * self.Gamma_error * self.e
+            self.ddt = - self.Gamma_theta * hessian * self.Gamma_error * err_masked
 
         # integration step:
-        self.theta += self.Ts * ddt
+        self.theta += self.Ts * self.ddt
         assert not any(np.isnan(self.theta))
 
         return self._return_a_scalar_if_is_scalar(self.theta)
 
     def get_filtered_error(self):
         return self._return_a_scalar_if_is_scalar(self.e)
+
+    def get_last_ddt(self):
+        return self._return_a_scalar_if_is_scalar(self.ddt)
 
 
 #>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>#

@@ -8,12 +8,14 @@ print(f"** sys.path[0] = {sys.path[0]}")
 
 import numpy as np
 import pytest
+import matplotlib.pyplot as plt
 from submodules.gcnutils.knavigation import kArrayNav
 from submodules.gcnutils.kltisystems import k1OrderLTIsysMimoDiscrete
 from efol import kEfol
 
 
 class TestClass_kEfol:
+    is_show_with_block = False
 
     def test_constructor_requires_theta0_Ts_Gamma_and_dim_alpha(self):
         # missing theta0
@@ -91,3 +93,91 @@ class TestClass_kEfol:
         with pytest.raises(AssertionError):
             kev.update(alpha, beta, hessian_bad)
 
+    def test_deadzone(self):
+
+        def fn_deadzone(err):
+            if abs(err) < 1:
+                mask = [0]
+            else:
+                mask = [1]
+            return mask
+
+        # simulation configuration:
+        Tmax = 2      # [s]
+        Ts   = 1./100 # [Hz]
+        T    = np.arange(0,Tmax, Ts)
+
+        # kEfol configuration:
+        theta = -1
+
+        efol = kEfol(
+                filterpole  = -15,
+                dim_alpha   = 1,
+                theta0      = theta,
+                Ts          = Ts,
+                Gamma_theta = 0.5,
+                fn_deadzone = fn_deadzone,
+        )
+
+        # setup:
+        fbeta = lambda theta: (2.+theta)**2 # <= approximator
+        H     = lambda theta: 2.*(2+theta)  # <= hessian
+
+        lst_log = list()
+        for t in T:
+
+            # known or measured:
+            alpha = 16. if t < 1.0 else 9.   # RHS
+
+            # modeled:
+            beta = fbeta(theta)             # LHS
+
+            # update:
+            theta = efol.update(alpha, beta, H(theta))
+            e     = efol.get_filtered_error()
+
+            # logging:
+            lst_log.append((e, alpha, beta, theta))
+
+            if abs(t-0.75) <= Ts:
+                assert  0.5 <= abs(beta-alpha) <= 1.0
+
+            if abs(t-1.75) <= Ts:
+                assert  0.4 <= abs(beta-alpha) <= 0.5
+
+
+        #.............................................#
+        fig = 0
+
+        #---- new figure:
+        fig = fig + 1
+
+        f = plt.figure(fig).clf()
+        f, ax = plt.subplots(3,1,num=fig)
+        ax = ax.reshape(-1)
+
+        M = np.asarray([i[1:3] for i in lst_log])
+        ax[0].plot(T, M)
+        ax[0].grid(True)
+        ax[0].legend(('alpha', 'beta'))
+
+        M = np.asarray([i[0] for i in lst_log])
+        ax[1].plot(T, M)
+        ax[1].grid(True)
+        ax[1].set_ylabel("filtered error")
+
+        M = np.asarray([i[3] for i in lst_log])
+        ax[2].plot(T, M)
+        ax[2].grid(True)
+        ax[2].set_ylabel("theta")
+
+        # do not change this order:
+        # (this makes matplotlib, Qt and wayland to cooperate!)
+        f.canvas.flush_events()
+        f.canvas.draw() 
+
+        #.............................................#
+        plt.show(block=self.is_show_with_block)
+        #.............................................#
+
+#>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>--<<..>>

@@ -18,6 +18,7 @@
   - [<span class="toc-section-number">4.2</span> Example 2](#example-2)
 - [<span class="toc-section-number">5</span> How to use
   it](#how-to-use-it)
+  - [<span class="toc-section-number">5.1</span> Deadzone](#deadzone)
 
 # Introduction
 
@@ -216,6 +217,7 @@ The initialization is done with:
 | `Ts`         | float    | Time step [s] |
 | `Gamma_theta` | float or iteratable | Matrix $\underline{\Gamma}_{\theta}$. |
 | `Gamma_error` | float or iteratable | Matrix $\underline{\Gamma}_{e}$. This is optional. |
+| `fn_deadzone` | function | see below |
 
 The update steps receives $\underline{\alpha}(t)$, $\underline{\beta}(t)$ and the Hessian matrix, which
 shall be calculated beforehand, like this:
@@ -226,3 +228,20 @@ theta = kEfol().update(alpha, beta, hessian)
 
 As $\underline{\beta}(t)$ depends on the estimations $\underline{\theta}$
 at the instant $[k-1]$, the `update()` method returns $\underline{\theta}[k]$.
+
+## Deadzone
+
+as the error goes to zero, there is a chance that the last integration step
+forces a change at the sign of the error elements rather bringing it to zero.
+at the next update cycle, the change direction will be reversed, and a again
+the error sign may change. this oscillation around the zero can be suppressed
+by blocking any updates on $\theta$ as the error reaches a small region around
+zero: the so called **deadzone**. The behavior resembles the *limit cycle* in
+the theory of dynamic system control.
+
+Before calculating the next $\theta$, the class offers a chance to influence
+the next update. It calls a function pointed by `fn_deadzone` which receives
+the current value of the filtered error, and expects as a return a list of
+weigths to have multiplied by each element in the error vector before the next
+update. If the returned list contains only zeros, no update will be perfomed.
+
